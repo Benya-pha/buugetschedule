@@ -74,35 +74,26 @@ export default function Home() {
           <div className="preview-window">
             <div className="preview-top">
               <div>
-                <span className="preview-kicker">YOUR SCHEDULE</span>
-                <strong>This week</strong>
+                <span className="preview-kicker">LAYOUT PREVIEW</span>
+                <strong>A space for your week</strong>
               </div>
               <span className="preview-menu" aria-hidden="true">···</span>
             </div>
-            <div className="preview-days" aria-hidden="true">
-              <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span>
-            </div>
-            <div className="preview-grid" aria-hidden="true">
-              <div className="preview-time"><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span></div>
+            <div className="preview-grid abstract-grid" aria-hidden="true">
               <div className="preview-column">
-                <div className="preview-course mint"><b>Class</b><small>09:00 — 10:50</small></div>
-                <div className="preview-course peach"><b>Workshop</b><small>11:00 — 12:50</small></div>
+                <div className="preview-course mint"><span className="preview-line long" /><span className="preview-line short" /></div>
+                <div className="preview-course peach"><span className="preview-line medium" /><span className="preview-line short" /></div>
               </div>
               <div className="preview-column">
-                <div className="preview-course lilac"><b>Lecture</b><small>09:00 — 11:50</small></div>
+                <div className="preview-course lilac tall"><span className="preview-line medium" /><span className="preview-line short" /></div>
+                <div className="preview-course blue"><span className="preview-line long" /><span className="preview-line short" /></div>
               </div>
               <div className="preview-column">
-                <div className="preview-course blue"><b>Seminar</b><small>10:00 — 11:50</small></div>
-              </div>
-              <div className="preview-column">
-                <div className="preview-course peach"><b>Studio</b><small>09:00 — 10:50</small></div>
-                <div className="preview-course mint"><b>Class</b><small>12:00 — 13:50</small></div>
-              </div>
-              <div className="preview-column">
-                <div className="preview-course blue"><b>Lecture</b><small>10:00 — 12:50</small></div>
+                <div className="preview-course blue"><span className="preview-line medium" /><span className="preview-line short" /></div>
+                <div className="preview-course mint tall"><span className="preview-line long" /><span className="preview-line short" /></div>
               </div>
             </div>
-            <div className="preview-footer"><span /> A little more room to think.</div>
+            <div className="preview-footer"><span /> Illustrative layout only · no timetable data</div>
           </div>
           <div className="floating-note">
             <span className="floating-note-icon">✳</span>
