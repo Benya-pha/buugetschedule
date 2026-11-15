@@ -6,13 +6,38 @@ export const dynamic = "force-dynamic";
 
 function readAttribute(source: string, name: string) {
   const pattern =
-    "(?:^|\\s)" + name + "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))";
+    "(?:^|\\\\s)" + name + "\\\\s*=\\\\s*(?:\\\"([^\\\"]*)\\\"|'([^']*)'|([^\\\\s>]+))";
   const match = source.match(new RegExp(pattern, "i"));
   return match?.[1] ?? match?.[2] ?? match?.[3] ?? null;
 }
 
+function describeControls(source: string) {
+  const controls: Array<Record<string, string | number | null>> = [];
+
+  for (const match of source.matchAll(/<(input|select|textarea|button)\\b([^>]*)>/gi)) {
+    const tag = match[1].toLowerCase();
+    const attrs = match[2] ?? "";
+    controls.push({
+      tag,
+      name: readAttribute(attrs, "name"),
+      id: readAttribute(attrs, "id"),
+      type: tag === "input"
+        ? (readAttribute(attrs, "type") ?? "text").toLowerCase()
+        : tag === "button"
+          ? (readAttribute(attrs, "type") ?? "submit").toLowerCase()
+          : null,
+      autocomplete: readAttribute(attrs, "autocomplete"),
+      optionCount: tag === "select"
+        ? ((source.slice(match.index ?? 0).match(/<option\\b/gi) ?? []).length)
+        : null
+    });
+  }
+
+  return controls;
+}
+
 /**
- * Returns only public login-form metadata. Never returns input values,
+ * Returns public login page structure only. Never returns input values,
  * cookies, response bodies, or student information.
  */
 export async function GET() {
@@ -38,44 +63,34 @@ export async function GET() {
     }
 
     const html = await response.text();
-    const forms: Array<{
-      action: string;
-      method: string;
-      inputs: Array<{
-        name: string | null;
-        id: string | null;
-        type: string;
-        autocomplete: string | null;
-      }>;
-    }> = [];
-
-    for (const match of html.matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form\s*>/gi)) {
-      const attributes = match[1] ?? "";
-      const body = match[2] ?? "";
-      const rawAction = readAttribute(attributes, "action");
-      const inputs = Array.from(body.matchAll(/<input\b([^>]*)>/gi)).map((input) => {
-        const attrs = input[1] ?? "";
+    const forms = Array.from(html.matchAll(/<form\\b([^>]*)>([\\s\\S]*?)<\\/form\\s*>/gi))
+      .map((match) => {
+        const attrs = match[1] ?? "";
+        const body = match[2] ?? "";
+        const rawAction = readAttribute(attrs, "action");
         return {
-          name: readAttribute(attrs, "name"),
           id: readAttribute(attrs, "id"),
-          type: (readAttribute(attrs, "type") ?? "text").toLowerCase(),
-          autocomplete: readAttribute(attrs, "autocomplete")
+          name: readAttribute(attrs, "name"),
+          action: rawAction ? new URL(rawAction, response.url).toString() : response.url,
+          method: (readAttribute(attrs, "method") ?? "get").toLowerCase(),
+          enctype: readAttribute(attrs, "enctype"),
+          controls: describeControls(body)
         };
       });
 
-      forms.push({
-        action: rawAction ? new URL(rawAction, response.url).toString() : response.url,
-        method: (readAttribute(attributes, "method") ?? "get").toLowerCase(),
-        inputs
-      });
-    }
+    const scripts = Array.from(html.matchAll(/<script\\b([^>]*)>/gi))
+      .map((match) => readAttribute(match[1] ?? "", "src"))
+      .filter((src): src is string => Boolean(src));
 
     return NextResponse.json(
       {
         inspected: true,
         pageUrl: response.url,
+        documentLength: html.length,
         formCount: forms.length,
-        forms
+        forms,
+        pageControls: describeControls(html),
+        externalScripts: scripts
       },
       { headers: { "Cache-Control": "no-store" } }
     );
