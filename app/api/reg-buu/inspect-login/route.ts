@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 function readAttribute(source: string, name: string) {
   const pattern =
-    "(?:^|\\\\s)" + name + "\\\\s*=\\\\s*(?:\\\"([^\\\"]*)\\\"|'([^']*)'|([^\\\\s>]+))";
+    "(?:^|\\s)" + name + "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))";
   const match = source.match(new RegExp(pattern, "i"));
   return match?.[1] ?? match?.[2] ?? match?.[3] ?? null;
 }
@@ -14,7 +14,7 @@ function readAttribute(source: string, name: string) {
 function describeControls(source: string) {
   const controls: Array<Record<string, string | number | null>> = [];
 
-  for (const match of source.matchAll(/<(input|select|textarea|button)\\b([^>]*)>/gi)) {
+  for (const match of source.matchAll(/<(input|select|textarea|button)\b([^>]*)>/gi)) {
     const tag = match[1].toLowerCase();
     const attrs = match[2] ?? "";
     controls.push({
@@ -28,7 +28,7 @@ function describeControls(source: string) {
           : null,
       autocomplete: readAttribute(attrs, "autocomplete"),
       optionCount: tag === "select"
-        ? ((source.slice(match.index ?? 0).match(/<option\\b/gi) ?? []).length)
+        ? ((source.slice(match.index ?? 0).match(/<option\b/gi) ?? []).length)
         : null
     });
   }
@@ -63,7 +63,7 @@ export async function GET() {
     }
 
     const html = await response.text();
-    const forms = Array.from(html.matchAll(/<form\\b([^>]*)>([\\s\\S]*?)<\\/form\\s*>/gi))
+    const forms = Array.from(html.matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form\s*>/gi))
       .map((match) => {
         const attrs = match[1] ?? "";
         const body = match[2] ?? "";
@@ -78,7 +78,7 @@ export async function GET() {
         };
       });
 
-    const scripts = Array.from(html.matchAll(/<script\\b([^>]*)>/gi))
+    const scripts = Array.from(html.matchAll(/<script\b([^>]*)>/gi))
       .map((match) => readAttribute(match[1] ?? "", "src"))
       .filter((src): src is string => Boolean(src));
 
