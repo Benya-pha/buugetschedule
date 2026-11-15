@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const features = [
   {
     number: "01",
@@ -20,10 +22,10 @@ export default function Home() {
   return (
     <main className="welcome">
       <header className="topbar">
-        <a className="brand" href="/" aria-label="buugetschedule home">
+        <Link className="brand" href="/" aria-label="buugetschedule home">
           <span className="brand-mark">b.</span>
           <span>buugetschedule</span>
-        </a>
+        </Link>
         <span className="topbar-note">A LITTLE MORE CLARITY, EVERY DAY</span>
       </header>
 
