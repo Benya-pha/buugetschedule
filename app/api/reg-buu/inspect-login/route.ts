@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 function readAttribute(source: string, name: string) {
   const match = source.match(
-    new RegExp(`(?:^|\\s)${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i")
+    new RegExp(\`(?:^|\\s)\${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))\`, "i")
   );
   return match?.[1] ?? match?.[2] ?? match?.[3] ?? null;
 }
@@ -49,11 +49,11 @@ export async function GET() {
       }>;
     }> = [];
 
-    for (const match of html.matchAll(/<form\\b([^>]*)>([\\s\\S]*?)<\\/form\\s*>/gi)) {
+    for (const match of html.matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form\s*>/gi)) {
       const attributes = match[1] ?? "";
       const body = match[2] ?? "";
       const rawAction = readAttribute(attributes, "action");
-      const inputs = Array.from(body.matchAll(/<input\\b([^>]*)>/gi)).map((input) => {
+      const inputs = Array.from(body.matchAll(/<input\b([^>]*)>/gi)).map((input) => {
         const attrs = input[1] ?? "";
         return {
           name: readAttribute(attrs, "name"),
