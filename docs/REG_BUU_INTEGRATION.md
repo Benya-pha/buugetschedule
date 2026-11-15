@@ -22,6 +22,14 @@ Do not guess:
 
 Do not store REG BUU credentials. Do not log credentials, request bodies, session cookies, or full upstream responses containing student information.
 
+## Screenshot-confirmed page behavior
+
+A user-provided screenshot confirms that the public login page visually presents a student ID field, a password field, and a button labeled “ตรวจสอบ”. A second user-provided screenshot confirms that, after login, the REG BUU student page displays student/course-program information, a weekly timetable grid, and a separate exam timetable section. These screenshots confirm the visible flow only; they do not reveal form field names, submission parameters, cookies, or machine-readable timetable markup.
+
+## Safe form-inspection endpoint
+
+`GET /api/reg-buu/inspect-login` fetches the public login page and returns only form action, method, and input name/id/type/autocomplete metadata. It deliberately omits input values, cookies, and the upstream HTML body. This endpoint is for integration inspection; it does not submit credentials or authenticate a student.
+
 ## Availability endpoint
 
 `GET /api/reg-buu/status` performs a server-side, unauthenticated GET of the public REG BUU home page. It checks reachability only. It does not authenticate a student or retrieve timetable data.
