@@ -74,6 +74,14 @@ h1 span { color: #829989; }
 .preview-days { display: grid; grid-template-columns: 38px repeat(5, 1fr); gap: 7px; margin-top: 27px; }
 .preview-days span { text-align: center; color: #929b94; font-size: 8px; letter-spacing: .08em; font-weight: 650; }
 .preview-grid { display: grid; grid-template-columns: 38px repeat(5, 1fr); gap: 7px; margin-top: 11px; min-height: 235px; }
+.abstract-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; min-height: 220px; margin-top: 25px; }
+.abstract-grid .preview-column { justify-content: flex-start; gap: 8px; }
+.abstract-grid .preview-course { min-height: 86px; gap: 10px; padding: 13px 9px; }
+.abstract-grid .preview-course.tall { min-height: 126px; }
+.preview-line { display: block; height: 5px; border-radius: 8px; background: rgba(69, 86, 72, .18); }
+.preview-line.long { width: 88%; }
+.preview-line.medium { width: 67%; }
+.preview-line.short { width: 43%; background: rgba(69, 86, 72, .11); }
 .preview-time { display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 0 0 8px; color: #a1aaa2; font-size: 8px; }
 .preview-column { display: flex; flex-direction: column; gap: 7px; }
 .preview-course { min-height: 74px; padding: 10px 7px; border-radius: 8px; display: flex; flex-direction: column; gap: 7px; }
@@ -127,10 +135,10 @@ h1 span { color: #829989; }
   .connection-card { padding: 12px; gap: 9px; }
   .status-label { font-size: 7px; }
   .preview-window { padding: 18px 12px 13px; border-radius: 15px; }
-  .preview-grid, .preview-days { grid-template-columns: 29px repeat(5, minmax(0, 1fr)); gap: 4px; }
-  .preview-course { padding: 8px 5px; }
-  .preview-course b { font-size: 8px; }
-  .preview-course small { font-size: 6px; }
+  .abstract-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; min-height: 190px; }
+  .abstract-grid .preview-course { padding: 10px 6px; min-height: 75px; }
+  .abstract-grid .preview-course.tall { min-height: 110px; }
+  .preview-line { height: 4px; }
   .section-heading { align-items: flex-start; flex-direction: column; gap: 8px; }
   .footer { flex-direction: column; gap: 6px; }
 }
