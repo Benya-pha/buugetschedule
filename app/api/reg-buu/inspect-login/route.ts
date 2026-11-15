@@ -5,9 +5,9 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function readAttribute(source: string, name: string) {
-  const match = source.match(
-    new RegExp(\`(?:^|\\s)\${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))\`, "i")
-  );
+  const pattern =
+    "(?:^|\\s)" + name + "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s>]+))";
+  const match = source.match(new RegExp(pattern, "i"));
   return match?.[1] ?? match?.[2] ?? match?.[3] ?? null;
 }
 
